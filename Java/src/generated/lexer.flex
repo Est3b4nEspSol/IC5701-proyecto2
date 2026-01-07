@@ -194,6 +194,8 @@ MultiCommentEnd = "э"
     "!"         { return symbol(sym.RBRACE); }
     "¿"         { return symbol(sym.LPAREN); }
     "?"         { return symbol(sym.RPAREN); }
+    "["         { return symbol(sym.LBRACKET); }
+    "]"         { return symbol(sym.RBRACKET); }
 
     /* Puntuación */
     ","         { return symbol(sym.COMMA); }

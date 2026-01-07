@@ -38,7 +38,7 @@ terminal
     AND, OR, NOT,
 
     /* Delimitadores */
-    LBRACE, RBRACE, LPAREN, RPAREN,
+    LBRACE, RBRACE, LPAREN, RPAREN, LBRACKET, RBRACKET,
 
     /* Puntuación */
     COMMA, SEMI, COLON, DOT, ASSIGN, ARROW,
