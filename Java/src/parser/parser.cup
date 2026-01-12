@@ -46,8 +46,178 @@ terminal
     /* Especiales */
     ERROR;
 
-/* regla vacía solo para que CUP funcione */
+/* No terminales */
+non terminal miLenguaje, functions, main, type, literal, operandoAr, sum, minus, mult, div, divInt, module, pow;
+non terminal operandoRel, less, lessEq, greater, greaterEq, equal, notEq, operandoLog, and, or, not, arithmeticOp;
+non terminal relationalOp, logicalOp, operandoUni, increment, decrement, negative, unaryOp, operation, arrayDimsWO;
+non terminal arrayDimsWI, arrayType, arrayElement, arrayElements,arrayLiteral, arrayCreation, arrayAccess, expression;
+non terminal creation, assignation, global, local, writeoutput, sentence, sentences, block, conditionalOp, else;
+non terminal condition, conditions, return, endcycle, endscycle, sentencecycle, decideof, loop, for, params, itemParams, function;
 
-non terminal programa;
-start with programa;
-programa ::= ;
+/* Precedencia de operadores */
+precedence left OR;
+precedence left AND;
+precedence left EQUAL, NOT_EQUAL;
+precedence left LESS, LESS_EQUAL, GREATER, GREATER_EQUAL;
+precedence left PLUS, MINUS;
+precedence left MULTIPLY, DIVIDE, INT_DIV, MODULO;
+precedence right POWER;
+precedence right INCREMENT, DECREMENT;
+precedence right NOT;
+
+/* Regla de inicio */
+start with miLenguaje;
+
+/* Producciones gramaticales */
+
+miLenguaje ::= functions main;
+
+/* Procedimiento inicial main */
+main ::= COAL NAVIDAD block;
+
+/* Tipado fuerte */
+type ::= INT | FLOAT | BOOL | CHAR | STRING;
+
+/* Literales */
+literal ::= LITERAL_INTEGER | LITERAL_FLOAT | BOOL_LITERAL | CHAR_LITERAL | STRING_LITERAL;
+
+/* Operaciones aritméticas, relacionales y lógicas */
+
+/* Aritméticos */
+operandoAr ::= LITERAL_INTEGER | LITERAL_FLOAT | IDENTIFIER | arithmeticOp | arrayAccessInt | GET;
+
+sum ::= operandoAr PLUS operandoAr | LPAREN operandoAr PLUS operandoAr RPAREN;
+
+minus ::= operandoAr MINUS operandoAr | LPAREN operandoAr MINUS operandoAr RPAREN;
+
+mult ::= operandoAr MULTIPLY operandoAr | LPAREN operandoAr MULTIPLY operandoAr RPAREN;
+
+div ::= operandoAr DIVIDE operandoAr | LPAREN operandoAr DIVIDE operandoAr RPAREN;
+
+divInt ::= operandoAr INT_DIV operandoAr | LPAREN operandoAr INT_DIV operandoAr RPAREN;
+
+module ::= operandoAr MODULO operandoAr| LPAREN operandoAr MODULO operandoAr RPAREN;
+
+pow ::= operandoAr POWER operandoAr | LPAREN operandoAr POWER operandoAr RPAREN;
+
+/* Relaciones */
+operandoRel ::= LITERAL_INTEGER | LITERAL_FLOAT | IDENTIFIER | arithmeticOp | arrayAccess;
+
+less ::= operandoRel LESS operandoRel | operandoRel LESS operandoRel RPAREN;
+
+lessEq ::= operandoRel LESS_EQUAL operandoRel | operandoRel LESS_EQUAL operandoRel RPAREN;
+
+greater ::= operandoRel GREATER operandoRel | operandoRel GREATER operandoRel RPAREN;
+
+greaterEq ::= operandoRel GREATER_EQUAL operandoRel | operandoRel GREATER_EQUAL operandoRel RPAREN;
+
+equal ::= operandoRel EQUAL operandoRel | operandoRel EQUAL operandoRel RPAREN;
+
+notEq ::= operandoRel NOT_EQUAL operandoRel | operandoRel NOT_EQUAL operandoRel RPAREN;
+
+operandoLog ::= BOOL_LITERAL | IDENTIFIER | relationalOp;
+
+/* Lógicos */
+and ::= operandoLog AND operandoLog | LPAREN operandoLog AND operandoLog RPAREN;
+
+or ::= operandoLog OR operandoLog | LPAREN operandoLog OR operandoLog RPAREN;
+
+not ::= NOT operandoLog | LPAREN NOT operandoLog RPAREN;
+
+arithmeticOp ::= sum | minus | mult | div | divInt | module | pow;
+
+relationalOp ::= less | lessEq | greater | greaterEq | equal | notEq;
+
+logicalOp ::= and | or | not;
+
+/* Operaciones unarias */
+operandoUni ::= IDENTIFIER | arrayAccess;
+
+increment ::= operandoUni INCREMENT | INCREMENT operandoUni;
+
+decrement ::= operandoUni DECREMENT | DECREMENT operandoUni;
+
+negative ::= NEGATE operandoAr;
+
+unaryOp ::= increment | decrement;
+
+/* Unión de las operaciones */
+operation ::= arithmeticOp | relationalOp | logicalOp | unaryOp;
+
+/* Arreglos */
+/* WO = without y WI = with it */
+arrayDimsWO ::= LBRACKET RBRACKET LBRACKET RBRACKET;
+
+arrayDimsWI ::= LBRACKET LITERAL_INTEGER RBRACKET LBRACKET LITERAL_INTEGER RBRACKET;
+
+arrayType ::= LITERAL_INTEGER | CHAR_LITERAL;
+
+arrayElement ::= LITERAL_INTEGER | CHAR_LITERAL;
+
+arrayElements ::= arrayElement | arrayElements COMMA arrayElement;
+
+arrayLiteral ::= LBRACE LBRACE arrayElements RBRACE COMMA LBRACE arrayElements RBRACE RBRACE;
+
+arrayCreation ::= arrayType IDENTIFIER arrayDimsWI SEMI | arrayType IDENTIFIER arrayDims ASSIGN arrayLiteral SEMI;
+
+/* los arreglos son de la forma tipo nombre [n][m]; o tipo nombre[][] = [[a,b,c],[d,e,f]]; */
+
+expression ::= literal | IDENTIFIER | arithmeticOp;
+
+arrayAccess ::= IDENTIFIER LBRACKET expression RBRACKET | IDENTIFIER LBRACKET expression RBRACKET LBRACKET expression RBRACKET;
+
+/* Creación y asignación de variables */
+creation ::= LPAREN type IDENTIFIER ASSIGN LPAREN literal | operation | GET RPAREN RPAREN | arrayCreation;
+
+assignation ::= IDENTIFIER ASSIGN LPAREN literal | operation | GET RPAREN | arrayAccess ASSIGN LPAREN arrayLiteral
+    | LBRACKET arrayElements RBRACE | arrayElement | GET RPAREN;
+
+global ::= WORLD creation;
+
+local ::= LOCAL creation;
+
+/* Salida */
+writeoutput ::= SHOW LPAREN IDENTIFIER | LITERAL_INTEGER | LITERAL_FLOAT | BOOL_LITERAL | STRING_LITERAL RPAREN;
+
+/* Sentences */
+sentence ::= creation | assignation | operation | writeoutput | return;
+
+sentences ::= sentence | sentences sentence;
+
+/* Bloques de código */
+block ::= LBRACE sentences RBRACE;
+
+/* Condicionales */
+conditionalOp ::= relationalOp | logicalOp;
+
+else ::= ELSE ARROW block;
+
+condition ::= conditionalOp ARROW block;
+
+conditions ::= condition | conditions condition;
+
+return ::= RETURN LPAREN literal | operation RPAREN;
+
+endcycle ::= conditionalOp ARROW block return | conditionalOp ARROW return | conditionalOp ARROW BREAK;
+
+endscycle ::= endcycle | endscycle endcycle;
+
+sentencecycle ::= sentencecycle sentences endscycle | sentencecycle endscycle sentences | endscycle sentences
+    | sentences endscycle | sentences | endscycle;
+
+/* Ciclos */
+decideof ::= DECIDE OF conditions else END DECIDE ENDL | DECIDE OF conditions END DECIDE ENDL;
+
+loop ::= LOOP sentencecycle EXIT WHEN conditionalOp ENDL END LOOP ENDL
+    | LOOP sentencecycle EXIT WHEN conditionalOp ENDL END LOOP ENDL;
+
+for ::= FOR creation SEMI relationalOp SEMI LPAREN assignation | unaryOp RPAREN LPAREN block | block endscycle RPAREN;
+
+/* Parámetros y funciones */
+params ::= LPAREN RPAREN | LPAREN itemParams RPAREN;
+
+itemParams ::= type IDENTIFIER | itemParams COMMA type IDENTIFIER;
+
+function ::= GIFT type IDENTIFIER params block return;
+
+functions ::= function | functions function;

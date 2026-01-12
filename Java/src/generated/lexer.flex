@@ -166,7 +166,6 @@ MultiCommentEnd = "э"
 
     /* Operadores Aritmeticos */
     "+"         { return symbol(sym.PLUS); }
-    "-" [0-9]   { /* Capturado por DecIntegerLiteral  */ }
     "-"         { return symbol(sym.MINUS); }
     "*"         { return symbol(sym.MULTIPLY); }
     "/"         { return symbol(sym.DIVIDE); }
