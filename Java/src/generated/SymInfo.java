@@ -29,3 +29,4 @@ enum SymKind {
     GLOBAL_ARRAY,
     LOCAL_ARRAY
 }
+

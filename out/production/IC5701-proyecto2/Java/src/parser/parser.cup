@@ -8,7 +8,27 @@ parser code {:
     public SymTable getSymTable() {
             return symtab;
         }
-
+    @Override
+    public void unrecovered_syntax_error(Symbol s) throws Exception {
+    System.err.println(
+      "ERROR SINTÁCTICO IRRECUPERABLE → token=" + s.sym +
+      " valor=" + s.value +
+      " línea=" + (s.left + 1) +
+      " columna=" + (s.right + 1)
+    );
+    throw new Exception("Error sintáctico irrecuperable");
+    }
+    @Override
+    public void report_error(String message, Object info) {
+      Symbol s = (Symbol) info;
+      System.err.println(
+        "ERROR SINTÁCTICO → " + message +
+        " token=" + s.sym +
+        " valor=" + s.value +
+        " línea=" + (s.left + 1) +
+        " columna=" + (s.right + 1)
+      );
+    }
     parser(Lexer lex){ this.lex=lex; }
 :}
 
@@ -46,7 +66,7 @@ terminal
 
 /* No terminales */
 non terminal program, functionList, mainFunction, functionDecl;
-non terminal type, statement, statementList, block, expression, exprTerm;
+non terminal type, statement, statementList, block, expression, exprTerm, op, uniop;
 non terminal paramList, param, arrayDecl, arrayAccess, returnStmt;
 non terminal varDecl, assignStmt, showStmt, getStmt, ifStmt, loopStmt, forStmt, forVarDec;
 non terminal condition, conditionList, elsePart, arrayLiteral, arrayElements;
@@ -140,7 +160,8 @@ statementList ::= /* vacío */
                  | statementList statement;
 
 /* 9. SENTENCIAS */
-statement ::= varDecl
+statement ::= error
+            | varDecl
             | arrayDecl
             | assignStmt
             | showStmt
@@ -313,27 +334,14 @@ exprTerm ::= LITERAL_INTEGER
            | IDENTIFIER
            | arrayAccess
            | GET LPAREN RPAREN
+           | expression
            | LPAREN expression RPAREN;
 
 /* 22. EXPRESIÓN (con precedencia implícita) */
 expression ::= exprTerm
-             | MINUS expression                    /* Negativo unario */
-             | NOT expression                      /* Negación lógica */
-             | INCREMENT expression                /* Pre-incremento */
-             | DECREMENT expression                /* Pre-decremento */
-             | expression POWER expression         /* Mayor precedencia */
-             | expression MULTIPLY expression
-             | expression DIVIDE expression
-             | expression INT_DIV expression
-             | expression MODULO expression
-             | expression PLUS expression
-             | expression MINUS expression
-             | expression LESS expression
-             | expression LESS_EQUAL expression
-             | expression GREATER expression
-             | expression GREATER_EQUAL expression
-             | expression EQUAL expression
-             | expression NOT_EQUAL expression
-             | expression AND expression
-             | expression OR expression;
+             | uniop expression
+             | expression op expression;
 
+uniop ::= MINUS | NOT | INCREMENT | DECREMENT;
+op ::= POWER | MULTIPLY | DIVIDE | INT_DIV | MODULO | PLUS | MINUS | LESS | LESS_EQUAL
+        | GREATER | GREATER_EQUAL | EQUAL | NOT_EQUAL | AND | OR;
