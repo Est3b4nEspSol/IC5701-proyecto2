@@ -88,8 +88,8 @@ functionDecl ::=
                 new SymInfo(
                     (String) id,
                     SymKind.FUNCTION,
-                    $idleft,
-                    $idright
+                    idleft,
+                    idright
                 )
             );
             symtab.enterScope();
@@ -107,10 +107,10 @@ param ::= type IDENTIFIER:id
     {:
         symtab.insert(
             new SymInfo(
-                (String) id.value,
+                (String) id,
                 SymKind.PARAM,
-                id.left,
-                id.right
+                idleft,
+                idright
             )
         );
     :};
@@ -156,10 +156,10 @@ varDecl ::= LOCAL type IDENTIFIER:id ENDL
     {:
         symtab.insert(
             new SymInfo(
-                (String) id.value,
+                (String) id,
                 SymKind.LOCAL_VAR,
-                id.left,
-                id.right
+                idleft,
+                idright
             )
         );
     :}
@@ -167,10 +167,10 @@ varDecl ::= LOCAL type IDENTIFIER:id ENDL
     {:
        symtab.insert(
            new SymInfo(
-               (String) id.value,
+               (String) id,
                SymKind.LOCAL_VAR,
-               id.left,
-               id.right
+               idleft,
+               idright
            )
        );
     :}
@@ -178,10 +178,10 @@ varDecl ::= LOCAL type IDENTIFIER:id ENDL
     {:
         symtab.insert(
             new SymInfo(
-                (String) id.value,
+                (String) id,
                 SymKind.GLOBAL_VAR,
-                id.left,
-                id.right
+                idleft,
+                idright
             )
         );
 :}
@@ -189,10 +189,10 @@ varDecl ::= LOCAL type IDENTIFIER:id ENDL
     {:
         symtab.insert(
             new SymInfo(
-                (String) id.value,
+                (String) id,
                 SymKind.GLOBAL_VAR,
-                id.left,
-                id.right
+                idleft,
+                idright
             )
         );
     :};
@@ -205,10 +205,10 @@ arrayDecl ::=
       {:
           symtab.insert(
               new SymInfo(
-                  (String) id.value,
+                  (String) id,
                   SymKind.LOCAL_ARRAY,
-                  id.left,
-                  id.right
+                  idleft,
+                  idright
               )
           );
       :}
@@ -216,10 +216,10 @@ arrayDecl ::=
       {:
             symtab.insert(
                 new SymInfo(
-                    (String) id.value,
+                    (String) id,
                     SymKind.LOCAL_ARRAY,
-                    id.left,
-                    id.right
+                    idleft,
+                    idright
                 )
             );
       :}
@@ -227,10 +227,10 @@ arrayDecl ::=
       {:
           symtab.insert(
               new SymInfo(
-                  (String) id.value,
+                  (String) id,
                   SymKind.GLOBAL_ARRAY,
-                  id.left,
-                  id.right
+                  idleft,
+                  idright
               )
           );
       :}
@@ -238,10 +238,10 @@ arrayDecl ::=
       {:
             symtab.insert(
                 new SymInfo(
-                    (String) id.value,
+                    (String) id,
                     SymKind.GLOBAL_ARRAY,
-                    id.left,
-                    id.right
+                    idleft,
+                    idright
                 )
             );
       :};

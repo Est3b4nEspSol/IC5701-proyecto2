@@ -85,7 +85,7 @@ public class App {
     public static void main(String[] args) throws Exception{
         int opcion = 0;
 
-        while (opcion != 3) { // autoexplicativa, interacción continua con el usuario
+        while (opcion != 4) { // autoexplicativa, interacción continua con el usuario
             System.out.println("=================================");
             System.out.println("Seleccione una opción:");
             System.out.println("1. Generar parser");
