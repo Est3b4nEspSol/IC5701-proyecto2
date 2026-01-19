@@ -351,7 +351,12 @@ statement ::= varDecl:vd
         resultado.addHijo(new Nodo("break"));
         RESULT = resultado;
     :}
-    | funcall ENDL;
+    | funcall:fc ENDL
+    {:
+        Nodo resultado = new Nodo("statement");
+        resultado.addHijo((Nodo)fc);
+        RESULT = resultado;
+    :};
 
 /* 11. DECLARACIÓN DE VARIABLE */
 varDecl ::= LOCAL type:t IDENTIFIER:id ENDL
