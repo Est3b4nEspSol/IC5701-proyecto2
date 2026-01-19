@@ -58,12 +58,12 @@ public class App {
         mfjc.prueba(fullPathScanner); // aquí es donde trabajamos con los tokens
     }
 
-    public static void PruebaSintactica() throws Exception{ // como su nombre indica, con este método hacemos pruebas
+    public static void PruebaSintactica(int opcion) throws Exception{ // como su nombre indica, con este método hacemos pruebas
         String basePath, fullPathScanner, nombre; // se crean variables para trabajar después
 
         basePath = System.getProperty("user.dir"); // inicializamos el camino base de los archivos
 
-        // esta sección es bastante autoexplicativa leyendo  los sout, pero se centra en
+        // esta sección es bastante autoexplicativa leyendo los sout, pero se centra en
         // pedir el nombre del archivo en el que vamos a utilizar el analizador léxico.
         while(true){
             System.out.println("Indicar nombre del archivo (en la carpeta codigoPrueba) en formato .txt (sin agregar .txt al final): ");
@@ -80,19 +80,21 @@ public class App {
             }
         }
 
-        mfjc.pruebaParser(fullPathScanner); // aquí es donde trabajamos con los tokens
+        mfjc.pruebaParser(fullPathScanner, opcion); // aquí es donde trabajamos con los tokens
     }
 
     public static void main(String[] args) throws Exception{
         int opcion = 0;
 
-        while (opcion != 4) { // autoexplicativa, interacción continua con el usuario
+        while (opcion != 6) { // autoexplicativa, interacción continua con el usuario
             System.out.println("=================================");
             System.out.println("Seleccione una opción:");
             System.out.println("1. Generar parser");
-            System.out.println("2. Probar analizador léxico");
-            System.out.println("3. Probar analizador sintáctico");
-            System.out.println("4. Salir");
+            System.out.println("2. Generar lexemas");
+            System.out.println("3. Generar árbol sintáctico");
+            System.out.println("4. Generar tabla de símbolos");
+            System.out.println("5. Generar todo lo anterior (excepto parser)");
+            System.out.println("6. Terminar programa");
             System.out.print("Opción: ");
 
             String input = scanner.nextLine(); // leer línea completa
@@ -114,9 +116,13 @@ public class App {
                     PruebasLexerParser();
                     break;
                 case 3:
-                    PruebaSintactica();
+                    PruebaSintactica(opcion%3);
                     break;
                 case 4:
+                    PruebaSintactica(opcion%3);
+                case 5:
+                    PruebaSintactica(opcion%3);
+                case 6:
                     System.out.println("Saliendo del programa...");
                     break;
                 default:

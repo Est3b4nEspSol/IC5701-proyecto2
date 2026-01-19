@@ -80,23 +80,36 @@ public class MainJFlexCup {
         }
     }
 
-    public void pruebaParser(String rutaScanear) throws Exception{
+
+    public void pruebaParser(String rutaScanear, int opcion) throws Exception{
         Reader reader = new BufferedReader(new FileReader(rutaScanear));
 
         generated.Lexer lexer = new generated.Lexer(reader);
         generated.parser parser = new generated.parser(lexer);
 
         parser.parse();
-
-        ArbolSintactico arbol = parser.getArbolSintactico();
-        if (arbol != null) {
-            arbol.print();
-        } else {
-            System.out.println("No disponible.");
+        if(opcion == 0){
+            ArbolSintactico arbol = parser.getArbolSintactico();
+            if (arbol != null) {
+                arbol.print();
+            } else {
+                System.out.println("No disponible.");
+            }
+        } else if (opcion == 1) {
+            System.out.println("\\n=== ANÁLISIS SINTÁCTICO COMPLETADO ===\\n");
+            parser.getSymTable().print();
         }
-        System.out.println("\\n=== ANÁLISIS SINTÁCTICO COMPLETADO ===\\n");
-        parser.getSymTable().print();
-
+        else{
+            prueba(rutaScanear);
+            ArbolSintactico arbol = parser.getArbolSintactico();
+            if (arbol != null) {
+                arbol.print();
+            } else {
+                System.out.println("No disponible.");
+            }
+            System.out.println("\\n=== ANÁLISIS SINTÁCTICO COMPLETADO ===\\n");
+            parser.getSymTable().print();
+        }
     }
 
     public static void main(String[] args) throws Exception {
